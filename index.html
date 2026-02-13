@@ -340,6 +340,40 @@
       background: rgba(255,45,111,.08);
       border:1px solid rgba(255,45,111,.20);
     }
+    /* Kiss Emoji Burst Effect */
+.kiss-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.kiss-emoji {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: 22px;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: kissFloat 900ms ease-out forwards;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.15));
+}
+
+@keyframes kissFloat {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)),
+                        calc(-50% - 80px))
+                        scale(1.3);
+  }
+}
   </style>
 </head>
 
@@ -364,7 +398,10 @@
 
         <div class="btnRow">
           <button class="primary" id="openCoupon">🎟️ Virtual Hug Coupon</button>
-          <button class="ghost" id="kissBtn">😘 Click here for a kiss</button>
+          <button class="ghost" id="kissBtn" style="position:relative;">
+  😘 Click here for a kiss
+  <span class="kiss-layer"></span>
+</button>
           <a class="btnLink ghost" href="#letter">💌 Read my letter</a>
           <a class="btnLink ghost" href="#gallery">📸 Our Photos</a>
         </div>
@@ -563,17 +600,42 @@
     });
 
     kissBtn.addEventListener("click", () => {
-      const lines = [
-        "😘 Sending a kiss… delivered!",
-        "💋 One kiss, two kisses… many kisses!",
-        "🫶 Kiss + hug combo sent!",
-        "🌙 Kiss sent with a ‘miss you’ included!",
-      ];
-      const pick = lines[Math.floor(Math.random()*lines.length)];
-      kissText.textContent = pick;
-      kissText.style.transform = "scale(1.02)";
-      setTimeout(()=>kissText.style.transform="scale(1)", 180);
-    });
+  // Random kiss text
+  const lines = [
+    "😘 Sending a kiss… delivered!",
+    "💋 One kiss, two kisses… many kisses!",
+    "🫶 Kiss + hug combo sent!",
+    "🌙 Kiss sent with a ‘miss you’ included!",
+  ];
+  const pick = lines[Math.floor(Math.random() * lines.length)];
+  kissText.textContent = pick;
+
+  // Emoji burst effect
+  const layer = kissBtn.querySelector(".kiss-layer");
+
+  for (let i = 0; i < 8; i++) {
+    const emoji = document.createElement("span");
+    emoji.className = "kiss-emoji";
+    emoji.textContent = "😘";
+
+    // Random spread left/right
+    const x = (Math.random() * 120 - 60).toFixed(1) + "px";
+    emoji.style.setProperty("--x", x);
+
+    // Random delay for smooth burst
+    emoji.style.animationDelay = (Math.random() * 150).toFixed(0) + "ms";
+
+    layer.appendChild(emoji);
+
+    // Remove after animation
+    emoji.addEventListener("animationend", () => emoji.remove());
+  }
+
+  // Small button bounce
+  kissBtn.style.transform = "scale(1.05)";
+  setTimeout(() => (kissBtn.style.transform = "scale(1)"), 180);
+});
+
 
     // Gallery click -> open lightbox
     galleryImgs.forEach(img => {
