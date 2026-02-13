@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sanju ❤️ Safna</title>
+  <style>
+    :root{
+      --bg1:#fff1f5;
+      --bg2:#ffe4ec;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --muted:#6b6b6b;
+      --accent:#ff2d6f;
+      --accent2:#ff6b9a;
+      --shadow: 0 12px 30px rgba(0,0,0,.10);
+      --radius: 18px;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 20% 10%, var(--bg2), transparent 70%),
+                  radial-gradient(900px 500px at 80% 30%, #ffd2de, transparent 65%),
+                  linear-gradient(180deg, var(--bg1), #fff);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    /* Floating hearts */
+    .heart{
+      position:fixed;
+      width:14px; height:14px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      top:110%;
+      left: var(--x);
+      opacity:.25;
+      animation: floatUp var(--d) linear infinite;
+      filter: blur(.2px);
+      z-index:0;
+    }
+    .heart:before,.heart:after{
+      content:"";
+      position:absolute;
+      width:14px;height:14px;
+      background: var(--accent);
+      border-radius:50%;
+    }
+    .heart:before{left:-7px; top:0;}
+    .heart:after{left:0; top:-7px;}
+    @keyframes floatUp{
+      0%{transform:translateY(0) rotate(45deg); opacity:.15;}
+      10%{opacity:.28;}
+      100%{transform:translateY(-140vh) rotate(45deg); opacity:0;}
+    }
+
+    header{
+      padding:42px 18px 18px;
+      position:relative;
+      z-index:1;
+    }
+
+    .wrap{max-width:980px; margin:0 auto;}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    @media (max-width:860px){
+      .hero{grid-template-columns:1fr;}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid rgba(255,45,111,.15);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .title{
+      margin:0 0 6px 0;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height:1.05;
+      letter-spacing:-.5px;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size: 15px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,45,111,.10);
+      border:1px solid rgba(255,45,111,.20);
+      color:#a10034;
+      font-weight:600;
+      font-size:13px;
+      margin-top:14px;
+    }
+    .badge span{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 6px rgba(255,45,111,.12);
+    }
+
+    .btnRow{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button, .btnLink{
+      cursor:pointer;
+      border:none;
+      border-radius: 14px;
+      padding:12px 14px;
+      font-weight:700;
+      font-size:14px;
+    }
+    .primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#fff;
+      box-shadow: 0 10px 22px rgba(255,45,111,.25);
+    }
+    .ghost{
+      background:#fff;
+      color: #b10039;
+      border:1px solid rgba(255,45,111,.25);
+    }
+    .btnLink{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    main{
+      padding:0 18px 50px;
+      position:relative;
+      z-index:1;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:16px;
+      margin-top:16px;
+    }
+    .col-7{grid-column: span 7;}
+    .col-5{grid-column: span 5;}
+    .col-6{grid-column: span 6;}
+    .col-12{grid-column: span 12;}
+    @media (max-width:860px){
+      .col-7,.col-5,.col-6{grid-column: span 12;}
+    }
+
+    h2{
+      margin:0 0 10px 0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    p{margin:0 0 12px 0; color:#2f2f2f;}
+    .muted{color:var(--muted);}
+
+    .list{
+      margin:0; padding:0 0 0 18px;
+      color:#2f2f2f;
+    }
+    .list li{margin:8px 0;}
+
+    .quote{
+      padding:16px;
+      border-left:4px solid var(--accent);
+      background: rgba(255,45,111,.06);
+      border-radius: 14px;
+      margin-top:10px;
+      font-weight:650;
+      color:#8d0030;
+    }
+
+    /* Coupon modal */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:10;
+    }
+    .overlay.show{display:flex;}
+    .modal{
+      width:min(520px, 100%);
+      background:#fff;
+      border-radius: 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      overflow:hidden;
+      border: 1px solid rgba(255,45,111,.20);
+    }
+    .modalTop{
+      padding:18px 18px 14px;
+      background: linear-gradient(135deg, #ffe0ea, #fff);
+      border-bottom: 1px dashed rgba(255,45,111,.35);
+    }
+    .modalTop h3{
+      margin:0;
+      font-size:20px;
+      color:#a10034;
+    }
+    .ticket{
+      padding:18px;
+      position:relative;
+      background: #fff;
+    }
+    .ticket:before, .ticket:after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:18px; height:18px;
+      background: rgba(255,45,111,.12);
+      border:1px solid rgba(255,45,111,.25);
+      border-radius:50%;
+      transform:translateY(-50%);
+    }
+    .ticket:before{left:-10px;}
+    .ticket:after{right:-10px;}
+    .couponBox{
+      border:2px dashed rgba(255,45,111,.45);
+      border-radius:18px;
+      padding:14px;
+      background: rgba(255,45,111,.05);
+    }
+    .code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:2px;
+      color:#7b0027;
+      background:#fff;
+      border:1px solid rgba(255,45,111,.25);
+      padding:10px 12px;
+      border-radius:14px;
+      display:inline-block;
+      margin-top:10px;
+    }
+    .modalBottom{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:14px 18px 18px;
+      background:#fff;
+      border-top: 1px solid rgba(255,45,111,.15);
+    }
+    .small{
+      font-size:12.8px;
+      color:var(--muted);
+      margin-top:8px;
+      line-height:1.35;
+    }
+
+    footer{
+      text-align:center;
+      padding:18px;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .sig{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,45,111,.08);
+      border:1px solid rgba(255,45,111,.20);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating hearts -->
+  <div class="heart" style="--x:10%;--d:10s;"></div>
+  <div class="heart" style="--x:18%;--d:14s;"></div>
+  <div class="heart" style="--x:30%;--d:12s;"></div>
+  <div class="heart" style="--x:44%;--d:16s;"></div>
+  <div class="heart" style="--x:56%;--d:11s;"></div>
+  <div class="heart" style="--x:68%;--d:15s;"></div>
+  <div class="heart" style="--x:80%;--d:13s;"></div>
+  <div class="heart" style="--x:92%;--d:17s;"></div>
+
+  <header class="wrap">
+    <div class="hero">
+      <section class="card">
+        <h1 class="title">Sanju ❤️ Safna</h1>
+        <p class="subtitle">A little love story written across distance…</p>
+
+        <div class="badge"><span></span> Happy Valentine’s Day, my love</div>
+
+        <div class="btnRow">
+          <button class="primary" id="openCoupon">🎟️ Virtual Hug Coupon</button>
+          <button class="ghost" id="kissBtn">😘 Click here for a kiss</button>
+          <a class="btnLink ghost" href="#letter">💌 Read my letter</a>
+        </div>
+
+        <p class="small">
+          Tip: Replace names, add your photos, and share this page link with him.  
+          (You can host it on GitHub Pages / Netlify / any free hosting.)
+        </p>
+      </section>
+
+      <aside class="card">
+        <h2>✨ Today’s Promise</h2>
+        <p>
+          Even if we are far, my love stays close — in every message, every prayer,
+          and every heartbeat.
+        </p>
+
+        <div class="quote">
+          “Distance means nothing… when someone means everything.”
+        </div>
+
+        <p class="muted" style="margin-top:12px;">
+          Open the coupon when you miss me the most 🫶
+        </p>
+      </aside>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid">
+      <div class="card col-7" id="letter">
+        <h2>💌 Dear Sanju,</h2>
+        <p>
+          This is not just a website… this is my heart in digital form — made only for you.
+        </p>
+        <p>
+          Even though miles stay between us, my love has never felt far.
+          You are the most beautiful part of my days, the calm in my chaos,
+          and the reason I smile for no reason.
+        </p>
+        <p>
+          This Valentine’s Day, I just want you to know one thing:
+          <b>I choose you. Always.</b>
+        </p>
+        <p class="muted">— Safna</p>
+      </div>
+
+      <div class="card col-5">
+        <h2>🕰️ From Friends to Forever</h2>
+        <p>
+          Once, we were just friends… and now, you are my safest place.
+        </p>
+        <p>
+          Our story is proof that love doesn’t need closeness — it only needs truth.
+          And you, Sanju… you are my truth.
+        </p>
+      </div>
+
+      <div class="card col-6">
+        <h2>💖 Reasons I Love You</h2>
+        <ul class="list">
+          <li>The way you care, even from far away</li>
+          <li>The way you make me feel loved</li>
+          <li>Your voice feels like home</li>
+          <li>You understand me without words</li>
+          <li>You are my favorite person</li>
+        </ul>
+      </div>
+
+      <div class="card col-6">
+        <h2>📅 One Day…</h2>
+        <p>
+          One day, this distance will be just a memory,
+          and I’ll get to hold you instead of missing you.
+        </p>
+        <p>
+          Until then… <b>I’m still yours.</b>
+        </p>
+        <div class="quote" id="kissText">😘 Sending a kiss…</div>
+      </div>
+
+      <div class="card col-12">
+        <h2>🎶 Optional: Add Your Playlist</h2>
+        <p class="muted">
+          Paste your Spotify/YouTube playlist link here (edit in code) or embed it.
+        </p>
+        <p>
+          Playlist idea title: <b>“Sanju & Safna Forever 💕”</b>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="sig">Made with ❤️ by Safna for Sanju</div>
+    </footer>
+  </main>
+
+  <!-- Coupon Modal -->
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Virtual Hug Coupon">
+      <div class="modalTop">
+        <h3>🎟️ Virtual Hug Coupon</h3>
+        <div class="muted" style="margin-top:6px;">Redeem anytime you miss me.</div>
+      </div>
+
+      <div class="ticket">
+        <div class="couponBox">
+          <p style="margin:0;"><b>This coupon is valid for:</b></p>
+          <ul class="list">
+            <li>1 tight virtual hug 🫂</li>
+            <li>3 forehead kisses 😘😘😘</li>
+            <li>1 “I’m proud of you” message 💬</li>
+            <li>Unlimited love ❤️ (no expiry)</li>
+          </ul>
+
+          <div class="muted" style="margin-top:10px;">Coupon Code:</div>
+          <div class="code" id="couponCode">HUG-4U-FOREVER</div>
+
+          <div class="small">
+            How to redeem: Just message me “I’m redeeming my hug coupon” and I’ll send you a hug + voice note immediately.
+          </div>
+        </div>
+      </div>
+
+      <div class="modalBottom">
+        <button class="primary" id="copyCode">📋 Copy Code</button>
+        <button class="ghost" id="closeCoupon">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const openCoupon = document.getElementById("openCoupon");
+    const closeCoupon = document.getElementById("closeCoupon");
+    const copyCode = document.getElementById("copyCode");
+    const couponCode = document.getElementById("couponCode");
+    const kissBtn = document.getElementById("kissBtn");
+    const kissText = document.getElementById("kissText");
+
+    openCoupon.addEventListener("click", () => overlay.classList.add("show"));
+    closeCoupon.addEventListener("click", () => overlay.classList.remove("show"));
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) overlay.classList.remove("show");
+    });
+
+    copyCode.addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(couponCode.textContent.trim());
+        copyCode.textContent = "✅ Copied!";
+        setTimeout(() => copyCode.textContent = "📋 Copy Code", 1500);
+      }catch(err){
+        alert("Copy not allowed on this device/browser. Please copy manually: " + couponCode.textContent);
+      }
+    });
+
+    kissBtn.addEventListener("click", () => {
+      const lines = [
+        "😘 Sending a kiss… delivered!",
+        "💋 One kiss, two kisses… many kisses!",
+        "🫶 Kiss + hug combo sent!",
+        "🌙 Kiss sent with a ‘miss you’ included!",
+      ];
+      const pick = lines[Math.floor(Math.random()*lines.length)];
+      kissText.textContent = pick;
+      kissText.style.transform = "scale(1.02)";
+      setTimeout(()=>kissText.style.transform="scale(1)", 180);
+    });
+
+    // Optional: change coupon code based on date
+    // couponCode.textContent = "SANJU-" + new Date().getFullYear();
+  </script>
+</body>
+</html>
